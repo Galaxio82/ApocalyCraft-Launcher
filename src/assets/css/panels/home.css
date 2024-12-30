@@ -1,0 +1,321 @@
+.home .container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* STATUS SERVER */
+.status-server {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--background);
+    width: 25rem;
+    height: 3rem;
+    color: var(--color);
+    border-radius: 10px;
+    margin-top: 3rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.server-status-icon {
+    height: 3.3rem;
+}
+
+.server-status-name {
+    font-size: 1.5rem;
+    color: var(--color);
+}
+
+.server-status-text {
+    font-size: 0.6rem;
+    color: #1AC707;
+}
+
+.server-status-infos .red {
+    color: #FF0409;
+}
+
+.status-player-count {
+    background: var(--shadow);
+    min-width: 3rem;
+    height: 3rem;
+    border-radius: 10px;
+}
+
+.player-count {
+    font-size: 1.5rem;
+    margin: 0.4rem 0.5rem;
+}
+
+.status-player-count:after {
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    top: 10px;
+    right: 10px;
+    border-radius: 15px;
+    border: solid 5px var(--background);
+    background: #1AC707;
+}
+
+.red:after {
+    background: #FF0409;
+}
+
+.home-bottom {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 80px - 8rem);
+    display: flex;
+}
+/* STATUS SERVER */
+
+/* NEWS SERVER */
+.news-list {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.news-block {
+    position: relative;
+    width: 300px;
+    height: 180px;
+    background: var(--background-transparent);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.news-category {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.news-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+    color: #fff;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.news-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 1;
+}
+
+.news-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.news-date {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+/* NEWS SERVER */
+
+/* SIDEBAR */
+.player-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    height: 3rem;
+    margin: 0 1.5rem;
+}
+
+.player-menu {
+    color: var(--element-color);
+    transform: rotate(270deg);
+    pointer-events: none;
+}
+
+.play-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-starting-game {
+    display: none;
+    text-align: center;
+}
+
+.progress-bar {
+    appearance: none;
+    height: 10px;
+    margin: 0.5rem 0;
+}
+
+.progress-bar::-webkit-progress-bar {
+    background-color: var(--background);
+    border: solid 1px var(--element-color);
+    border-radius: 10px;
+}
+
+.progress-bar::-webkit-progress-value {
+    background-color: var(--element-color);
+    border-radius: 10px;
+}
+
+.instances-tab p {
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+.instance-elements {
+    background: var(--background-element);
+    text-align: center;
+    border-radius: 10px;
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.instance-elements:hover {
+    background: var(--element-color);
+}
+
+.active-instance {
+    background: var(--element-color);
+}
+/* SIDEBAR */
+
+.button-container {
+    position: absolute;
+    bottom: 75px;
+    left: 28%;
+    transform: translateX(-50%);
+    width: 300px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.play-btn {
+    border: none;
+    border-radius: 15px;
+    background-color: var(--element-color);
+    color: #000000;
+    font-size: 1.4rem;
+    font-weight: bold;
+    padding: 0.5rem 6rem;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    display: inline-block;
+    min-width: 200px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.instance-select {
+    margin-top: 5px;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background-color: var(--background);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    border: 2px solid var(--element-color);
+    text-align: center;
+    box-sizing: border-box;
+    transition: none;
+}
+
+.play-btn:hover {
+    background-color: var(--element-color);
+    transform: scale(1.05);
+}
+
+.instance-select:focus {
+    border-color: var(--element-color);
+    outline: none;
+    box-shadow: none;
+}
+
+.instance-select:hover {
+    background-color: var(--background);
+    transform: none;
+}
+
+.instance-select option {
+    background-color: var(--background);
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    border: none;
+}
+
+.instance-select:focus option:checked {
+    background-color: var(--element-color);
+    color: white;
+}
+
+.instance-select option:hover {
+    background-color: var(--element-color);
+    color: white;
+}
+
+.instance-select option:not(:checked) {
+    background-color: var(--background);
+}
+
+.instance-select::-ms-expand {
+    display: none;
+}
+
+.instance-select::-webkit-scrollbar {
+    width: 8px;
+}
+
+.instance-select::-webkit-scrollbar-thumb {
+    background-color: var(--element-color);
+    border-radius: 10px;
+}
+
+
+
+
