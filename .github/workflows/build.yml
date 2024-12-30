@@ -1,76 +1,66 @@
 name: Launcher Build
 on:
   push:
-    branches: [main]
+    branches: [ main ]  # Branche sur laquelle le workflow sera exécuté
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Permet d'écrire dans les contenus du dépôt
-      id-token: write   # Permet de générer des tokens d'identification si nécessaire
+      contents: write   # Nécessaire pour écrire dans les contenus du dépôt (créer des releases)
+      id-token: write    # Autorisation pour émettre des tokens d'identification, si nécessaire pour d'autres actions
 
     steps:
-      # Étape 1 : Vérifier le code source
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  # Vérifier le code source
 
-      # Étape 2 : Extraire la version du package.json
       - name: Get version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV  # Extraire la version du package.json
 
-      # Étape 3 : Créer une release sur GitHub
+      # Étape pour créer la balise (tag)
+      - name: Create Tag
+        run: |
+          git tag ${{ env.version }}  # Crée la balise à partir de la version dans package.json
+          git push origin ${{ env.version }}  # Pousse la balise sur GitHub
+
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1  # Créer la release sur GitHub
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du GITHUB_TOKEN pour l'authentification
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.version }}  # Utilisation de la version extraite du package.json
+          tag_name: ${{ env.version }}  # Utiliser la balise (tag) comme nom de release
           release_name: release ${{ env.version }}
           draft: false
           prerelease: ${{ contains(env.version, 'beta') || contains(env.version, 'alpha') }}
 
   build-launcher:
-    needs: create-release  # Le build ne se fait qu'après la création de la release
+    needs: create-release
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]  # Construire sur 3 plateformes différentes
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      # Étape 1 : Vérifier le code source
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      # Étape 2 : Configurer Node.js
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
 
-      # Étape 3 : Configurer Python (nécessaire pour certaines dépendances)
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      # Étape 4 : Installer les dépendances via npm
       - name: Install Dependencies
         run: npm ci
         shell: bash
 
-      # Étape 5 : Construire l'application avec electron-builder
       - name: Build
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du GITHUB_TOKEN pour authentifier la construction
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
         shell: bash
-
-      # Étape 6 : Uploader les artefacts générés dans la release GitHub
-      - name: Upload Artifacts to GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/**/*  # Uploader tous les fichiers générés dans le dossier dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du GITHUB_TOKEN pour authentifier l'upload
