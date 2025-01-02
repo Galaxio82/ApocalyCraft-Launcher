@@ -1,39 +1,58 @@
-name: Build/release
-
-on: push
+# module du helios launcher
+name: Launcher Build
+on:
+  push:
+    branches: [ main ]
 
 jobs:
-    release:
-        runs-on: ${{ matrix.os }}
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-        strategy:
-            matrix:
-                os: [macos-latest, ubuntu-latest, windows-latest]
+      - name: Get version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version }}
+          release_name: release ${{ env.version }}
+          draft: false
+          prerelease: ${{ contains(env.version, 'beta') || contains(env.version, 'alpha') }}
 
-        steps:
-            - name: Check out Git repository
-              uses: actions/checkout@v1
+  build-launcher:
+    needs: create-release
+    runs-on: ${{ matrix.os }}
 
-            - name: Install Node.js, NPM and Yarn
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 16
+    strategy:
+      matrix:
+        os: [macos-14, ubuntu-latest, windows-latest]
 
-            - name: Electron-builder compiler action
-              uses: x6pnda/action-electron-compiler@v1.0.1
-              with:
-                  # GitHub token, automatically provided to the action
-                  # (Optional)
-                  github_token: ${{ secrets.github_token }}
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
-                  # If the commit is tagged with a version (e.g. "v1.0.0"),
-                  # (Optional)
-                  release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
 
-                  # Package manager. NPM, PNPM and Yarn supported. Install Yarn and PNPM yourself. Default is NPM
-                  # (Optional)
-                  package_manager: NPM
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
 
-                  # Skip buiding the application
-                  # (Optional)
-                  skip_build: false
+      - name: Install Dependencies
+        run: npm ci
+        shell: bash
+
+      - name: Build
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: npm run build
+        shell: bash
