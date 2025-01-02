@@ -73,8 +73,8 @@ class Index {
                 compression: 'maximum',
                 asar: true,
                 publish: [{
-                    provider: "generic",
-                    url: "http://89.213.131.47/updates/"
+                    provider: "github",
+                    releaseType: 'release',
                 }],
                 win: {
                     icon: "./app/assets/images/icon.ico",
